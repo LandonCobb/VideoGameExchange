@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  mongo: 
+    container_name: mongo_db
+    image: mongo:latest
+    ports:
+      - "2717:27017"
+    volumes: 
+      - ./data://data/db
+      - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+    networks: 
+      - vgnetwork
+  api: 
+    restart: always
+    build: .
+    links: 
+      - mongo
+    volumes:
+      - ./://usr/src/app:ro
+      - /usr/src/app/node_modules/
+    depends_on: 
+      - mongo
+    ports: 
+      - 5069-5071:${PORT}
+    environment: 
+      PORT: ${PORT}
+      MONGO_URL: ${MONGO_URL}
+    networks:
+      - vgnetwork
+    deploy:
+      replicas: 2
+
+networks:
+  vgnetwork: 
+    name: vgnetwork
+    external: false

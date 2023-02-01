@@ -1,0 +1,223 @@
+openapi: 3.1.0
+info: 
+  title: Video Game Exchange
+  description: This API provides management of video games and users including CRUD functions, and offers between users and games
+  version: 1.1.0
+paths:
+  # all video games operation
+  /games:
+    get:
+      summary: get all video games
+      description: retrieves all video games and returns as an array of objects
+      operationId: get-games
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/game"
+  # single game operations
+  /games/{gameId}:
+    parameters:
+      - $ref: "#/components/parameters/gameId"
+    get:
+      summary: get single video game
+      description: retrieves a video game and returns it 
+      operationId: get-game
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/game"
+  /updategame/{gameId}:
+    parameters:
+      - $ref: "#/components/parameters/gameId"
+    patch:
+      summary: update a video game
+      description: updates single values of a video game object or multiple values
+      operationId: patch-game
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/game"
+  /deletegame/{gameId}:
+    parameters:
+      - $ref: "#/components/parameters/gameId"
+    delete:
+      summary: delete single video game
+      description: deltes a video game  
+      operationId: delete-game
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/game"
+  /creategame:
+    post:
+      summary: create single video game
+      description: creates a video game 
+      operationId: create-game
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/game"
+  # user operations
+  /register:
+    post:
+      summary: create a user
+      description: creates a user able to access the website
+      operationId: register-user
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+  /users/{userId}:
+    parameters:
+      - $ref: "#/components/parameters/userId"
+    get:
+      summary: get single user
+      description: retrieves a user and returns it 
+      operationId: get-user
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+  /users:
+    get:
+      summary: get all users
+      description: retrieves all users and returns as an array of objects 
+      operationId: get-users
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+  # offer operations
+  /offer/{userId}:
+    parameters:
+      - $ref: "#/components/parameters/userId"
+    post:
+      summary: create an offer
+      description: creates an offer using another user's id
+      operationId: send-offer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+  /updateoffer/{offerId}:
+    parameters:
+      - $ref: "#/components/parameters/offerId"
+    patch:
+      summary: update an offer status
+      description: updates an offer's status and does neccessary updates to user's lists of games
+      operationId: patch-offer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+  /offer/{offerId}:
+    parameters:
+      - $ref: "#/components/parameters/offerId"
+    get:
+      summary: get an offer
+      description: view an offer before responding to it
+      operationId: get-offer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+  /deleteoffer/{offerId}:
+    parameters:
+      - $ref: "#/components/parameters/offerId"
+    delete:
+      summary: delte an offer
+      description: deltes an offer after being declined or cancled
+      operationId: delete-offer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offer"
+
+components:
+  parameters:
+    gameId:
+      name: gameId
+      in: path
+      required: true
+      schema: 
+        $ref: "#/components/schemas/game"
+    userId:
+      name: userId
+      in: path
+      required: true
+      schema: 
+        $ref: "#/components/schemas/user"
+    offerId:
+      name: offerId
+      in: path
+      required: true
+      schema: 
+        $ref: "#/components/schemas/offer"
+  schemas:
+    game:
+      type: object
+      properties:
+        title:
+          type: string
+        year:
+          type: integer
+        publisher:
+          type: string
+        system:
+          type: string
+        condition:
+          type: string
+    user:
+      type: object
+      properties:
+        name:
+          type: string
+        email: 
+          type: string
+        address: 
+          type: string
+    offer:
+      type: object
+      properties:
+        offeredGames:
+          type: array
+        recievedGames:
+          type: array
+        offerStatus:
+          type: string
