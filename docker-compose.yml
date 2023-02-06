@@ -22,7 +22,7 @@ services:
     depends_on: 
       - mongo
     ports: 
-      - 5069-5071:${PORT}
+      - 5069-5070:${PORT}
     environment: 
       PORT: ${PORT}
       MONGO_URL: ${MONGO_URL}
