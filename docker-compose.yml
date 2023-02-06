@@ -30,6 +30,12 @@ services:
       - vgnetwork
     deploy:
       replicas: 2
+    nginx:
+      build: ./nginx
+      ports: 
+        - "7272:80"
+      depends_on:
+        - api
 
 networks:
   vgnetwork: 
