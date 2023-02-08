@@ -21,17 +21,22 @@ services:
       - /usr/src/app/node_modules/
     depends_on: 
       - mongo
-    ports: 
-      - 5069-5070:${PORT}
     environment: 
       PORT: ${PORT}
       MONGO_URL: ${MONGO_URL}
     networks:
       - vgnetwork
     deploy:
+      mode: replicated
       replicas: 2
+    ports:
+      - 5069:5069
   nginx:
-    build: ./nginx
+    image: nginx:latest
+    volumes: 
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      - vgnetwork
     ports: 
       - "7272:80"
     depends_on:
