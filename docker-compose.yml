@@ -29,8 +29,6 @@ services:
     deploy:
       mode: replicated
       replicas: 2
-    ports:
-      - 5069:5069
   nginx:
     image: nginx:latest
     volumes: 
