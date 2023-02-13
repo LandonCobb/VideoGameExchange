@@ -1,0 +1,14 @@
+docker exec broker \
+kafka-topics --boostrap-server broker:9092 \
+    --create \
+    --topic offers
+
+
+docker exec --interactive broker \
+kafka-console-consumer --boostrap-server broker:9092 \
+    --topic offers \
+    --from beginning
+
+docker exec --interactive broker \
+kafka-console-producer --boostrap-server broker:9092 \
+    --topic offers
