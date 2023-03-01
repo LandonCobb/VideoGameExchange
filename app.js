@@ -8,7 +8,22 @@ const { PORT } = require("./keys");
 
 var indexRouter = require('./routes/index');
 
+const expressPromBundle = require('express-prom-bundle');
+
 var app = express();
+
+const metricsMiddleware = expressPromBundle({
+    includeMethod: true,
+    includePath: true,
+    includeStatusCode: true,
+    includeUp: true,
+    customLabels: {project_name: "vge_api", project_type: "api_service"},
+    promClient: {
+        collectDefaultMetrics: {}
+    }
+})
+
+app.use(metricsMiddleware)
 
 app.use(logger('dev'));
 app.use(express.json());

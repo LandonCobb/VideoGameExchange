@@ -8,11 +8,14 @@ module.exports = function () {
     }
 
     async function GET(req, res, next) {
-        res.status(200).json(await GetOneOffer(req.params.offerId))
+        const offer = await GetOneOffer(req.params.offerId)
+        
+        res.status(200).json()
     }
 
     async function PUT(req, res, next) {
         const offer = await UpdateOffers(req.params.offerId, req.body)
+        //ProduceOfferMessage('offer-status-change', req.body)
         res.status(204).json(offer)
     }
 

@@ -22,8 +22,10 @@ services:
     depends_on: 
       - mongo
     environment: 
-      PORT: ${PORT}
-      MONGO_URL: ${MONGO_URL}
+      - PORT=5069
+      - MONGO_URL=mongodb://mongo_db:27017
+      # - BROKER_SERVER_ADDRESS=broker:29092
+      # - OFFERS_TOPIC=offers
     networks:
       - vgnetwork
     deploy:
@@ -45,6 +47,8 @@ services:
     environment:
       - ZOOKEEPER_CLIENT_PORT=2181
       - ZOOKEEPER_TICK_TIME=2000
+    networks:
+      - vgnetwork
   broker:
     image: confluentinc/cp-kafka:7.3.0
     container_name: broker
@@ -60,6 +64,24 @@ services:
       - zookeeper
     ports:
       - "9092:9092"
+    networks:
+      - vgnetwork
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    depends_on:
+      - api
+      - broker
+      - mongo
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    networks:
+      - vgnetwork
+
+volumes:
+  prometheus-data:
 
 networks:
   vgnetwork: 

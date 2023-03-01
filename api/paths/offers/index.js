@@ -1,4 +1,5 @@
 const { GetOneOffer, CreateOffer, UpdateOffers, DeleteOffer } = require("../../services/offer-service")
+const { ProduceOfferMessage } = require("../../streams/kafka")
 
 module.exports = function () {
     let operations = {
@@ -7,6 +8,7 @@ module.exports = function () {
 
     async function POST(req, res, next) {
         const offer = await CreateOffer(req.body)
+        //ProduceOfferMessage('offer-created', req.body)
         res.status(201).json(offer)
     }
 
